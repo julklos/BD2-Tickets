@@ -1,0 +1,13 @@
+{% extends "landingPage/index.html" %}
+{% block content %}
+<div class="btn-group-lg buttons-select" role="group">
+    <a href=" {% url 'ztm_app:carton' %}"></a>
+        <button type="button" class="btn btn-primary">BILET KARTONIKOWY
+        </button>
+    </a>
+    <a href=" {% url 'ztm_app:card' %}">
+        <button type="button"  class="btn btn-info">DOŁADOWANIE KARTY
+        </button>
+    </a>
+</div>
+{% endblock %}
