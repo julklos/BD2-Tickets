@@ -2,6 +2,13 @@
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
 <div>
+    <span><p>Ulga_waznosc: {{ulga.data_waznosci}}</p></span>
+    <span><p>Ulga_typ: {{ulga.id_typu_ulgi.wielkosc_ulgi}} %</p></span>
+    <span><p>Data waznosci bilet: {{ticket.data_waznosci}}</p></span>
+    <span><p>Data aktywacji bilet: {{ticket.data_aktywacji}}</p></span>
+    <span><p>Pasazer: {{ticket.id_pasazera.id_pasazera.imie}} {{ticket.id_pasazera.id_pasazera.nazwisko}}</p></span>
+</div>
+<div>
     <h3 style="margin-top: 5%" class="text-left">Strefa</h1>
         
         <div  style="margin-top: 0.5%" class="btn-group-lg buttons-select" role="group">
