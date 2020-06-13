@@ -1,0 +1,18 @@
+{% extends "landingPage/index.html" %}
+{% block content %}
+<h1 class="text-left">Metoda płatności</h1>
+<div>
+    <h3 style="margin-top: 5%" class="text-left">Wybierz metodę płatności i zapłać</h1>
+        
+        <div  style="margin-top: 0.5%" class="btn-group-lg buttons-select" role="group">
+            {% for pay in payment %} 
+            <a  href="{% url 'ztm_app:thankyou' %}">
+                <button onclick="payCard({{pay.id_metody_platnosci}})" type="button" class="btn-lg btn-info">{{pay.nazwa}}
+                </button>
+            </a>
+        
+            {% endfor %}
+        </div>
+        
+</div>
+{% endblock %}

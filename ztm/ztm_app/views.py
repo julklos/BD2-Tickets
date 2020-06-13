@@ -57,6 +57,7 @@ def reductionCarton(request):
     }
     return render(request, template_name = "landingPage/selectReduction.html", context = context)
 
+
 def confirmCarton(request):
     payment = MetodyPlatnosci.objects.all()
     context = {
@@ -64,6 +65,14 @@ def confirmCarton(request):
     }
 
     return render(request, template_name = "landingPage/selectPayment.html", context = context)
+
+def confirmCard(request):
+    payment = MetodyPlatnosci.objects.all()
+    context = {
+        'payment': payment
+    }
+
+    return render(request, template_name = "landingPage/selectPaymentCard.html", context = context)
 
 def selectZoneTicket(request):
     id_t = request.POST.get('id_t')
@@ -75,7 +84,7 @@ def selectZoneTicket(request):
     
     user_ticket = list(Imienne.objects.filter(id_nosnika = id_t).order_by('-data_waznosci'))
     user_ulga = Ulgi.objects.get(id_ulgi = user_card.id_ulgi)
-    if user_ticket[0].data_waznosci is not None and user_ticket[0].data_waznosci > datetime.date.today():
+    if user_ticket[0].data_waznosci is not None and user_ticket[0].data_waznosci > datetime.date.today(): # DO ZMIANY
         contex = {
         'name':  "Doladowanie karty",
         'cardId' : user_card,
@@ -84,13 +93,13 @@ def selectZoneTicket(request):
         }
         return render(request, "landingPage/ticketExist.html", context = contex)
 
-    zones = TypyBiletow.objects.order_by().values('strefa').distinct()
+    time = TypyBiletow.objects.filter(czas_waznosci__gte=datetime.timedelta(days=4))
     contex = {
         'name':  "Doladowanie karty",
         'cardId' : user_card,
         'ticket' : user_ticket[0],
         'ulga' : user_ulga,
-        'zones': list(zones),
+        'time': list(time),
     }
     return render(request, template_name = "landingPage/selectCardZone.html", context = contex)
 
