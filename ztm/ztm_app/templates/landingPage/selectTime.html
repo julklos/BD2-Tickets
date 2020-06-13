@@ -1,7 +1,7 @@
 {% extends "landingPage/index.html" %}
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
-<div>
+<div style="max-height: 85%; overflow: auto;">
     <h3 class="text-left">Czas</h1> 
         
             {% for t in time %} 
@@ -11,6 +11,7 @@
                     <h5 class="mb-1">Czas ważności:  {{t.czas_waznosci}}</h5>
                   </div>
                   <p class="mb-1">Cena: {{t.cena}}</p>
+                  <p> strefa: <span class="badge badge-primary badge-pill">{{t.strefa}}</span></p>
                 </a>
               </div>
             {% endfor %}
