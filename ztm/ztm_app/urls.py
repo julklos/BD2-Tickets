@@ -12,10 +12,11 @@ urlpatterns = [
     path('index', views.index, name="index"),
     path('card', views.selectCard, name='selectCard'),
     path('zones', views.zonesCarton, name='zonesCarton'),
-    path('timeCarton/<str:zone>', views.timeCarton, name='timeCarton'),
+    path('timeCarton', views.timeCarton, name='timeCarton'),
     path('reductionCarton', views.reductionCarton, name='reductionCarton'),
     path('confirmCarton', views.confirmCarton, name="confirmCarton"),
     path('zonesCard', views.selectZoneTicket, name="zonesCard")
+    path('transactionCarton', views.transactionCarton, name='transactonCarton')
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),
