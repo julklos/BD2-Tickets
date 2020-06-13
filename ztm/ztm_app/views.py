@@ -60,25 +60,30 @@ def transactionCarton(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         place = MiejscaTransakcji.object.get(id_miejsca_transakcji = int(body['place']))
-        payment = MetodyPlatnosci.object.get(id_metody_platnosci = body['payment'])
-        ticketType = TypyBiletow.object.get(id_typu = body['type'])
-        reduction = TypyUlgi.object.get(id_typu_ulgi = body['reduction'])
+        payment = MetodyPlatnosci.object.get(id_metody_platnosci = 1)
         transaction = Transakcje.objects.create(id_miejsca_transakcji=place, id_metody_platnosci = payment)
-        cartonTicket = NosnikiKartonikowe.objects.create(kod=random.randint(1,100000000))
-        ticket = Nieimienne.object.create(id_transakcji=transaction, id_nosnika= cartonTicket,id_typu= ticketType,id_typu_ulgi=reduction)
-        print('transakcja', transaction, cartonTicket, ticket)
+        print('transakcja', transaction)
         context = {
             'transaction': transaction,
-            'payment': payment,
-            'ticketType': ticketType,
-            'reduction': reduction
         }
 
         pass
     elif request.method == 'PUT':
+
         pass
     elif request.method == 'GET':
         pass
     elif request.method == 'DELETE':
         pass
     return render(request, template_name = "landingPage/selectPayment.html", context= context)
+def addTicket(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+    return null
+
+def amount(request):
+    return render(request, template_name ="landingPage/selectAmount.html")
+
+def continueCarton(request):
+    return render(request, template_name="landingPage/continueCarton.html")

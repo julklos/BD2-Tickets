@@ -15,7 +15,9 @@ urlpatterns = [
     path('timeCarton', views.timeCarton, name='timeCarton'),
     path('reductionCarton', views.reductionCarton, name='reductionCarton'),
     path('confirmCarton', views.confirmCarton, name="confirmCarton"),
-    path('transactionCarton', views.transactionCarton, name='transactonCarton')
+    path('transactionCarton', views.transactionCarton, name='transactonCarton'),
+    path('amount', views.amount, name="amount"),
+    path('continueCarton', views.continueCarton, name="continueCarton")
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),
