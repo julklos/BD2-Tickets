@@ -4,9 +4,12 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.template import loader
-from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci
+
+from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi
+
 import datetime
 import json
+import random
 
 
 def index(request):
@@ -16,11 +19,9 @@ def index(request):
     }
     return render(request, template_name = "landingPage/selectType.html", context= context)
 
-def card(request):
-    all_tickets_types = TypyBiletow.objects.all()
-    template = loader.get_template('landingPage/index.html')
+def selectCard(request):
     context = {
-        'all_tickets_types':  all_tickets_types,
+        'name':  "Doladowanie karty",
     }
     return render(request, template_name = "landingPage/cardTicket.html",context=context)
 
@@ -31,7 +32,15 @@ def zonesCarton(request):
         'zones': list(zones),
     }
     return render(request, template_name = "landingPage/selectZone.html", context= context)
-def timeCarton(request):
+def timeCarton(request, zone):
+    time = TypyBiletow.objects.filter(czas_waznosci__lt=datetime.timedelta(days=4), strefa = zone)
+    context = {
+        'name': "Bilet kartonikowy",
+        'time': list(time),
+        'next': "{% url 'ztm_app:reductionCarton' %}"
+    }
+    return render(request, template_name = "landingPage/selectTime.html", context= context)
+def selectTicketCarton(request):
     time = TypyBiletow.objects.filter(czas_waznosci__lt=datetime.timedelta(days=4))
     context = {
         'name': "Bilet kartonikowy",
@@ -53,29 +62,70 @@ def confirmCarton(request):
     context = {
         'payment': payment
     }
+
     return render(request, template_name = "landingPage/selectPayment.html", context = context)
+
+def selectZoneTicket(request):
+    id_t = request.POST.get('id_t')
+    print(id_t)
+    try:
+        user_card = NosnikiElektroniczne.objects.get(id_nosnika=id_t)
+    except:
+        return render(request, template_name = "landingPage/invalidId.html")
+    
+    user_ticket = list(Imienne.objects.filter(id_nosnika = id_t).order_by('-data_waznosci'))
+    user_ulga = Ulgi.objects.get(id_ulgi = user_card.id_ulgi)
+    if user_ticket[0].data_waznosci is not None and user_ticket[0].data_waznosci > datetime.date.today():
+        contex = {
+        'name':  "Doladowanie karty",
+        'cardId' : user_card,
+        'ticket' : user_ticket[0],
+        'ulga' : user_ulga,
+        }
+        return render(request, "landingPage/ticketExist.html", context = contex)
+
+    zones = TypyBiletow.objects.order_by().values('strefa').distinct()
+    contex = {
+        'name':  "Doladowanie karty",
+        'cardId' : user_card,
+        'ticket' : user_ticket[0],
+        'ulga' : user_ulga,
+        'zones': list(zones),
+    }
+    return render(request, template_name = "landingPage/selectCardZone.html", context = contex)
+
+    
 
 def transactionCarton(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        place = MiejscaTransakcji.object.get(id_miejsca_transakcji = int(body['place']))
-        payment = MetodyPlatnosci.object.get(id_metody_platnosci = 1)
+        print(int(body['place']))
+        place = MiejscaTransakcji.objects.get(id_miejsca_transakcji = int(body['place']))
+        payment = MetodyPlatnosci.objects.get(id_metody_platnosci = body['payment'])
         transaction = Transakcje.objects.create(id_miejsca_transakcji=place, id_metody_platnosci = payment)
-        print('transakcja', transaction)
-        context = {
-            'transaction': transaction,
-        }
+        for item in body['items']:
+            reduction = TypyUlgi.objects.get(id_typu_ulgi = item['reduction'])
+            typeTicket = TypyBiletow.objects.get(id_typu_biletu= item['type'])
+            for i in range(1, int(item['amount'])+1):
+                
+                ticket = NosnikiKartonikowe.objects.create(kod = random.randint(1,1000000))
+                ticketCarton = Nieimienne.objects.create(id_transakcji= transaction.id_transakcji, id_nosnika=ticket,id_typu=typeTicket.id_typu_biletu,id_typu_ulgi= reduction)
+
+        #print('transakcja', transaction)
+        # context = {
+        #     'transaction': transaction,
+        # }
+        print(place, payment, body)
 
         pass
     elif request.method == 'PUT':
-
         pass
     elif request.method == 'GET':
         pass
     elif request.method == 'DELETE':
         pass
-    return render(request, template_name = "landingPage/selectPayment.html", context= context)
+    return render(request, template_name='landingPage/index.html')
 def addTicket(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
@@ -87,3 +137,6 @@ def amount(request):
 
 def continueCarton(request):
     return render(request, template_name="landingPage/continueCarton.html")
+
+def thankYou(request):
+    return render(request, template_name="landingPage/thankYou.html")

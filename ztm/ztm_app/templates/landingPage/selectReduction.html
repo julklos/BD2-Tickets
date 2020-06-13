@@ -1,8 +1,8 @@
 {% extends "landingPage/index.html" %}
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
-<div style="max-height: 85%; overflow: auto;>
-    <h3 class="text-left">Ulga</h1> 
+<div style="max-height: 85%; overflow: auto;">
+    <h3 class="text-left">Wybierz ulgę</h3> 
         {% for r in reduction %} 
             <div onclick="setReduction({{r.id_typu_ulgi}})" style="width: 50%" class="list-group">
                 <a  href="{% url 'ztm_app:amount' %}" class="list-group-item list-group-item-action flex-column align-items-start">

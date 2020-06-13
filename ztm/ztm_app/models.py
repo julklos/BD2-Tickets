@@ -94,8 +94,8 @@ class Pasazerowie(models.Model):
 
 class Transakcje(models.Model):
     id_transakcji = models.AutoField(primary_key=True)
-    data_zakupu = models.DateTimeField()
-    kwota = models.FloatField()
+    data_zakupu = models.DateTimeField(auto_now_add=True)
+    kwota = models.FloatField(default=0)
     id_miejsca_transakcji = models.ForeignKey(MiejscaTransakcji, models.DO_NOTHING, db_column='id_miejsca_transakcji')
     id_metody_platnosci = models.ForeignKey(MetodyPlatnosci, models.DO_NOTHING, db_column='id_metody_platnosci')
 

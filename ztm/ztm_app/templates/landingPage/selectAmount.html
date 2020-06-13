@@ -1,18 +1,21 @@
-% extends "landingPage/index.html" %}
+{% extends "landingPage/index.html" %}
 {% block content %}
-<h1 class="text-left">{{name}}</h1>
-<div style="max-height: 85%; overflow: auto;>
-    <h3 class="text-left">Ulga</h1> 
-        {% for r in reduction %} 
-            <div onclick="setReduction({{r.id_typu_ulgi}})" style="width: 50%" class="list-group">
-                <a  href="{% url 'ztm_app:amount' %}" class="list-group-item list-group-item-action flex-column align-items-start">
-                  <div   class="d-flex w-50 justify-content-between">
-                    <h5 class="mb-1">  {{r.nazwa}}</h5>
-                  </div>
-                  <p class="mb-1">{{r.wielkosc_ulgi}} %</p>
-                </a>
-              </div>
-            {% endfor %}
+<h1 class="text-left">Bilety kartonikowe</h1>
+<div style="max-height: 85%; overflow: auto;">
+    <h3 class="text-left">Ilość biletów</h3> 
+   
+            <select id="selectAmount">
+                <option value="1" selected ="selected">1</option>
+                <option value="2" >2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+      
+      <a  href="{% url 'ztm_app:continueCarton' %}" >
+      <button style="margin-left:5%" onclick="setAmount()" type="button" class="btn btn-primary">Dalej</button>
+      </a>
+
 </div>
 
 {% endblock %}

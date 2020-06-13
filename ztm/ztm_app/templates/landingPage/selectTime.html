@@ -2,7 +2,7 @@
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
 <div style="max-height: 85%; overflow: auto;">
-    <h3 class="text-left">Czas</h1> 
+    <h3 class="text-left">Wybierz bilet</h3> 
         
             {% for t in time %} 
             <div  onclick= "setTicketType({{t.id_typu_biletu}})" style="width: 50%" class="list-group">
