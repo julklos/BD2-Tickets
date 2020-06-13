@@ -4,7 +4,9 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.template import loader
-from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci
+
+from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi
+
 import datetime
 import json
 
@@ -16,11 +18,9 @@ def index(request):
     }
     return render(request, template_name = "landingPage/selectType.html", context= context)
 
-def card(request):
-    all_tickets_types = TypyBiletow.objects.all()
-    template = loader.get_template('landingPage/index.html')
+def selectCard(request):
     context = {
-        'all_tickets_types':  all_tickets_types,
+        'name':  "Doladowanie karty",
     }
     return render(request, template_name = "landingPage/cardTicket.html",context=context)
 
@@ -53,7 +53,39 @@ def confirmCarton(request):
     context = {
         'payment': payment
     }
+
     return render(request, template_name = "landingPage/selectPayment.html", context = context)
+
+def selectZoneTicket(request):
+    id_t = request.POST.get('id_t')
+    print(id_t)
+    try:
+        user_card = NosnikiElektroniczne.objects.get(id_nosnika=id_t)
+    except:
+        return render(request, template_name = "landingPage/invalidId.html")
+    
+    user_ticket = list(Imienne.objects.filter(id_nosnika = id_t).order_by('-data_waznosci'))
+    user_ulga = Ulgi.objects.get(id_ulgi = user_card.id_ulgi)
+    if user_ticket[0].data_waznosci is not None and user_ticket[0].data_waznosci > datetime.date.today():
+        contex = {
+        'name':  "Doladowanie karty",
+        'cardId' : user_card,
+        'ticket' : user_ticket[0],
+        'ulga' : user_ulga,
+        }
+        return render(request, "landingPage/ticketExist.html", context = contex)
+
+    zones = TypyBiletow.objects.order_by().values('strefa').distinct()
+    contex = {
+        'name':  "Doladowanie karty",
+        'cardId' : user_card,
+        'ticket' : user_ticket[0],
+        'ulga' : user_ulga,
+        'zones': list(zones),
+    }
+    return render(request, template_name = "landingPage/selectCardZone.html", context = contex)
+
+    
 
 def transactionCarton(request):
     if request.method == 'POST':
