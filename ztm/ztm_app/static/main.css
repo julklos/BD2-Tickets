@@ -25,6 +25,12 @@
     margin-top: 20%;
     margin-bottom: 5%;
 }
+.label-place{
+    color: #117a8b
+}
+.form-place{
+    border-color:  #117a8b !important;
+}
 /* Set black background color, white text and some padding */
 footer {
     

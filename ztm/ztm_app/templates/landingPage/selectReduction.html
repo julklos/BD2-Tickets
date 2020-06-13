@@ -1,0 +1,18 @@
+{% extends "landingPage/index.html" %}
+{% block content %}
+<h1 class="text-left">{{name}}</h1>
+<div>
+    <h3 class="text-left">Ulga</h1> 
+        {% for r in reduction %} 
+            <div onclick="setReduction({{r.id_typu_ulgi}})" style="width: 50%" class="list-group">
+                <a  href="{% url 'ztm_app:confirmCarton' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div   class="d-flex w-50 justify-content-between">
+                    <h5 class="mb-1">  {{r.nazwa}}</h5>
+                  </div>
+                  <p class="mb-1">{{r.wielkosc_ulgi}} %</p>
+                </a>
+              </div>
+            {% endfor %}
+</div>
+
+{% endblock %}

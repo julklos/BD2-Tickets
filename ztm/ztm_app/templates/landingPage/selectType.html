@@ -1,13 +1,21 @@
 {% extends "landingPage/index.html" %}
 {% block content %}
 <div class="btn-group-lg buttons-select" role="group">
-    <a href=" {% url 'ztm_app:carton' %}"></a>
-        <button type="button" class="btn btn-primary">BILET KARTONIKOWY
+    <a href=" {% url 'ztm_app:zonesCarton' %}">
+        <button onclick="setPlace()" type="button" class="btn-lg btn-primary">BILET KARTONIKOWY
         </button>
     </a>
     <a href=" {% url 'ztm_app:card' %}">
-        <button type="button"  class="btn btn-info">DOŁADOWANIE KARTY
+        <button onclick="setPlace()" type="button"  class="btn-lg btn-info">DOŁADOWANIE KARTY
         </button>
     </a>
 </div>
+<div class="form-group">
+    <label style="color: #117a8b" for="selectPlace">Wybierz miejsce</label>
+    <select style="border-color: #117a8b" class="form-place form-control-sm" id="selectPlace">
+        {% for place in places %}
+            <option value={{place.id_miejsca_transakcji}} id={{place.id_miejsca_transakcji}}>{{place.nazwa}}</option>
+        {% endfor %}
+    </select>
+  </div>
 {% endblock %}
