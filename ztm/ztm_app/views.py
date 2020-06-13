@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import TypyBiletow, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci
 import datetime
+import json
 
 
 def index(request):
@@ -53,4 +54,18 @@ def confirmCarton(request):
     context = {
         'payment': payment
     }
-    return render(request, template_name = "landingPage/confirmCarton.html", context = context)
+    return render(request, template_name = "landingPage/selectPayment.html", context = context)
+
+def transactionCarton(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        print('post',body)
+        pass
+    elif request.method == 'PUT':
+        pass
+    elif request.method == 'GET':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    return render(request, template_name = "landingPage/selectPayment.html")
