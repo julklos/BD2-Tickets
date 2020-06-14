@@ -8,6 +8,48 @@ function setPlace() {
     
   }
 
+  function summary(){
+      tickets = loadTickets()
+      console.log('here',tickets)
+      sum = tickets.items.reduce(function(acc, t) {
+        return acc + (parseFloat(t.price)*parseFloat(t.amount)*parseFloat(t.reduction_val)/100);
+      }, 0.0).toFixed(2);
+      console.log(sum)
+      sumHTML = tickets.items.map(function(item) {
+        return genOneItemHtml( item.reduction_val, item.zone, item.price, item.time, item.amount);
+      });
+      sumHTML.join();
+      console.log(sumHTML, sum)
+      $("#tickettable").html(sumHTML[0]);
+    
+      sum = genSumHtml(sum);
+      $("#ticketsum").html(sum);
+        
+  }
+
+  function genOneItemHtml(reduction, zone, price,time, amount) {
+    var str = "<div class=\"row\"><div class=\"col-md-4\"><h5 class=\"product-name\"><strong> Czas ważności: ";
+    str += time;
+    str += " </strong></h5></div><div class=\"col-md-2\"><h6><strong>"
+    str += price;
+    str += "zł </strong></h6></div><div class=\"col-md-2\"><h6><span class=\"text-muted\">x </span>";
+    str += amount;
+    str += "</h6></div><div class=\"col-md-2\"><h6><span class=\"text-muted\"> Ulga: ";
+    str += reduction;
+    str +=" % </span></h6><div class=\"col-md-1\"><p> strefa: <span class=\"badge badge-primary badge-pill\">";
+    str += zone;
+    str += "</span></p></div></div><hr>";
+    return str;
+  }
+  
+  
+  function genSumHtml(sum) {
+    var str = "<h4 class=\"text-center\">Łącznie <strong>";
+    str += sum;
+    str += "zł</strong></h4>";
+    return str;
+  }
+
   function getCookie(c_name)
 {
   if (document.cookie.length > 0) {
@@ -41,20 +83,24 @@ function storeTickets(tickets) {
 function loadTickets() {
     return JSON.parse(window.localStorage.getItem("tickets"));
   }
-function setTicketType(d){
-    tickets = loadTickets();
+function setTicketType(d,t,s, p){
+    var tickets = loadTickets();
     if(!tickets){
         var tickets= new Object();
         tickets.items = []
         console.log('here')
     }
-    console.log(d, tickets)
     var item = new Object();
     item.type = d
+    item.time = t
+    item.zone = s
+    item.price = p
     tickets.items.push(item);
     storeTickets(tickets);
+    
    
 }
+
 function setAmount() {
     var value =  document.getElementById("selectAmount").value;
     tickets = loadTickets();
@@ -64,36 +110,49 @@ function setAmount() {
     storeTickets(tickets)
 }
 
-function setReduction(r){
+function setReduction(r, val){
     tickets = loadTickets();
     var last = tickets.items.pop()
     last.reduction = r
+    last.reduction_val = val
     tickets.items.push(last);
     storeTickets(tickets)
 }
 
 function pay(id){
+    var items = JSON.parse(window.localStorage.getItem('tickets')).items
+    items = items.map(el=>{return({
+        "reduction": el.reduction,
+        "amount": el.amount,
+        "type": el.type
+    })})
+    console.log(items, items[0])
     const data = {
         payment : id,
         place : JSON.parse(window.localStorage.getItem('place')).id,
-        items: JSON.parse(window.localStorage.getItem('tickets')).items,
+        items: items,
     }
     console.log(id,data)
     sendTransactionRequest(data, function(response) { // success
         alert("Zamówienie złożone pomyślnie!");
        console.log(response)
+       $("#tickettable").html();
+       $("#ticketsum").html();
       }, sendOrderError);
 }
 
 function sendTransactionRequest(info, onSuccess, onError)
-{
-  $.ajax(
+{   var csrftoken = getCookie('csrftoken');
+    var headers = new Headers();
+    headers.append('X-CSRFToken', csrftoken); 
+     $.ajax(
     { url: '/transactionCarton'
     , success: onSuccess
     , data: JSON.stringify(info)
     , contentType: 'application/json'
     , error: onError
     , type: 'POST'
+    , headers: headers
     });
 }
 function sendOrderError(xhr, textstatus) {

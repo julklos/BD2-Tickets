@@ -5,7 +5,7 @@
     <h3 class="text-left">Wybierz bilet</h3> 
         
             {% for t in time %} 
-            <div  onclick= "setTicketType({{t.id_typu_biletu}})" style="width: 50%" class="list-group">
+            <div  onclick= "setTicketType('{{t.id_typu_biletu}}', '{{t.czas_waznosci}}', '{{t.strefa}}', '{{t.cena}}')" style="width: 50%" class="list-group">
                 <a  href="{% url 'ztm_app:reductionCarton' %}" class="list-group-item list-group-item-action flex-column align-items-start">
                   <div  class="d-flex w-50 justify-content-between">
                     <h5 class="mb-1">Czas ważności:  {{t.czas_waznosci}}</h5>
