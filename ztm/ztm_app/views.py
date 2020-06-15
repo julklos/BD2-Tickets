@@ -57,7 +57,7 @@ def reductionCarton(request):
     }
     return render(request, template_name = "landingPage/selectReduction.html", context = context)
 
-def confirmCarton(request, type, red):
+def confirmCarton(request):
     payment = MetodyPlatnosci.objects.all()
     context = {
         'payment': payment

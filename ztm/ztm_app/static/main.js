@@ -108,6 +108,7 @@ function setAmount() {
     last.amount = value
     tickets.items.push(last);
     storeTickets(tickets)
+    setUrlContinue()
 }
 
 function setReduction(r, val){
