@@ -20,7 +20,14 @@ urlpatterns = [
     path('amount', views.amount, name="amount"),
     path('continueCarton', views.continueCarton, name="continueCarton"),
     path('zonesCard', views.selectZoneTicket, name="zonesCard"),
-    path('thankyou', views.thankYou, name="thankyou")
+    path('thankyou', views.thankYou, name="thankyou"),
+    path('reportPage', views.reportPage, name="reportPage"),
+    path('editPage', views.editPage, name="editPage"),
+    path('statsPage', views.statsPage, name="statsPage"),
+    path('addConcession', views.addConcession, name="addConcession"),
+    path('addCardType', views.addCardType, name="addCardType"),
+    path('deleteConcession', views.deleteConcession, name="deleteConcession"),    
+    path('deleteCardType', views.deleteCardType, name="deleteCardType"),
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),

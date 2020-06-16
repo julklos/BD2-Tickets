@@ -1,0 +1,18 @@
+{% extends "reportPage/index.html" %}
+
+{% block content %}
+    <form action="{% url 'ztm_app:addCardType' %}" method="POST" class="add-form">
+        {% csrf_token %}
+        <h1>Dodaj typ nośnika</h1>
+        {% for field in form %}
+            <div class="form-part">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+        {% endfor %}
+        
+        <div class="form-part">
+            <button type="submit" class="blue-btn">DODAJ TYP NOŚNIKA</button>
+        </div> 
+    </form>
+{% endblock %}

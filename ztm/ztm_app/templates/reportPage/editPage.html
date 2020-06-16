@@ -1,0 +1,33 @@
+{% extends "reportPage/index.html" %}
+
+{% block content %}
+    <div class="options vertical">
+        <div class="option">
+            <a href="{% url 'ztm_app:addConcession' %}">
+                <button class="green-btn">DODAJ TYP ULGI</button>
+            </a>
+    
+            <a href="{% url 'ztm_app:editPage' %}">
+                <button class="blue-btn">EDYTUJ TYP ULGI</button>
+            </a>
+    
+            <a href="{% url 'ztm_app:deleteConcession' %}">
+                <button class="red-btn">USUŃ TYP ULGI</button>
+            </a>
+        </div>
+
+        <div class="option">
+            <a href="{% url 'ztm_app:addCardType' %}">
+                <button class="green-btn">DODAJ TYP NOŚNIKA</button>
+            </a>
+            
+            <a href="{% url 'ztm_app:editPage' %}">
+                <button class="blue-btn">EDYTUJ TYP NOŚNIKA</button>
+            </a>
+
+            <a href="{% url 'ztm_app:deleteCardType' %}">
+                <button class="red-btn">USUŃ TYP NOŚNIKA</button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
