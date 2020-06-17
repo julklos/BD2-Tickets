@@ -19,8 +19,9 @@ function setPlace() {
         return genOneItemHtml( item.reduction_val, item.zone, item.price, item.time, item.amount);
       });
       sumHTML.join();
+      
       console.log(sumHTML, sum)
-      $("#tickettable").html(sumHTML[0]);
+      $("#tickettable").html(sumHTML);
     
       sum = genSumHtml(sum);
       $("#ticketsum").html(sum);
@@ -28,17 +29,17 @@ function setPlace() {
   }
 
   function genOneItemHtml(reduction, zone, price,time, amount) {
-    var str = "<div class=\"row\"><div class=\"col-md-4\"><h5 class=\"product-name\"><strong> Czas ważności: ";
+    var str = "<div class=\"row\"><div class=\"col-md-4\"><h6 class=\"product-name\"><strong> Czas ważności: ";
     str += time;
-    str += " </strong></h5></div><div class=\"col-md-2\"><h6><strong>"
+    str += " </strong></h6></div><div class=\"col-md-1\"><h6><strong>"
     str += price;
-    str += "zł </strong></h6></div><div class=\"col-md-2\"><h6><span class=\"text-muted\">x </span>";
+    str += "zł </strong></h6></div><div class=\"col-md-1\"><h6><span class=\"text-muted\">x </span>";
     str += amount;
     str += "</h6></div><div class=\"col-md-2\"><h6><span class=\"text-muted\"> Ulga: ";
     str += reduction;
-    str +=" % </span></h6><div class=\"col-md-1\"><p> strefa: <span class=\"badge badge-primary badge-pill\">";
+    str +=" % </span></h6>strefa: <span class=\"badge badge-primary badge-pill\">";
     str += zone;
-    str += "</span></p></div></div><hr>";
+    str += "</span></div></div><hr>";
     return str;
   }
   
