@@ -1,0 +1,31 @@
+{% extends "reportPage/index.html" %}
+
+
+{% block content %}
+
+<div class="cards-list">    
+    <h1>Dostępne typy ulg</h1>
+    {% for type in types %}
+        <div class="card-entry">
+            <span><strong>Nazwa:</strong> {{ type.nazwa }}</span>        
+            <span><strong>Wysokość ulgi:</strong> {{ type.wielkosc_ulgi }}</span>
+            <span><strong>ID:</strong> {{ type.id_typu_ulgi }}</span>    
+        </div>
+    {% endfor %}
+</div>
+
+<h1>Edytuj typ ulgi</h1>
+<form action="{% url 'ztm_app:updateConcession' %}" method="POST" class="update-form">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-part">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+    {% endfor %}
+    
+    <div class="form-part">
+        <button type="submit" class="blue-btn">EDYTUJ TYP ULGI</button>
+    </div> 
+</form>
+{% endblock %}

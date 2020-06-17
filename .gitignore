@@ -1,0 +1,4 @@
+.vscode/
+venv
+ztm/ztm/__pycache__/
+ztm/ztm_app/migrations/
