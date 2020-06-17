@@ -28,6 +28,8 @@ urlpatterns = [
     path('addCardType', views.addCardType, name="addCardType"),
     path('deleteConcession', views.deleteConcession, name="deleteConcession"),    
     path('deleteCardType', views.deleteCardType, name="deleteCardType"),
+    path('updateCardType', views.updateCardType, name="updateCardType"),
+    path('updateConcession', views.updateConcession, name="updateConcession"),
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),

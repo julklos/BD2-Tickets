@@ -11,7 +11,7 @@ import datetime
 import json
 import random
 
-from ztm_app.forms import ConcessionForm, CardTypeForm, DeleteCardTypeForm, DeleteConcessionForm
+from ztm_app.forms import ConcessionForm, CardTypeForm, DeleteCardTypeForm, DeleteConcessionForm, UpdateConcessionForm, UpdateCardTypeForm
 
 def index(request):
     places = MiejscaTransakcji.objects.all()
@@ -196,3 +196,35 @@ def deleteCardType(request):
         types = TypyNosnikow.objects.all().values()
         form = DeleteCardTypeForm()
     return render(request, template_name="reportPage/deleteCardType.html", context={'form': form, 'types': types})
+
+def updateConcession(request):
+    if request.method == 'POST':
+        form = UpdateConcessionForm(request.POST)
+        if form.is_valid():
+            concession = TypyUlgi.objects.get(id_typu_ulgi=form.cleaned_data['id'])
+            if form.cleaned_data['code'] is not None:
+                concession.kod_podstawowy = form.cleaned_data['code']
+            if form.cleaned_data['discount'] is not None:
+                concession.wielkosc_ulgi = form.cleaned_data['discount']
+            if form.cleaned_data['name']:
+                concession.nazwa = form.cleaned_data['name']
+            concession.save()
+        return render(request, template_name="reportPage/updateSuccess.html", context={'name': 'Typ Ulgi'})
+    else:
+        types = TypyUlgi.objects.all().order_by('id_typu_ulgi').values()
+        form = UpdateConcessionForm()
+        return render(request, template_name="reportPage/updateConcession.html", context={'form': form, 'types': types})
+
+def updateCardType(request):
+    if request.method == 'POST':
+        form = UpdateCardTypeForm(request.POST)
+        if form.is_valid():
+            card_type = TypyNosnikow.objects.get(id_typu_nosnika=form.cleaned_data['id'])
+            if form.cleaned_data['name']:
+                card_type.nazwa = form.cleaned_data['name']
+            card_type.save()
+        return render(request, template_name="reportPage/updateSuccess.html", context={'name': 'Typ Nośnika'})
+    else:
+        types = TypyNosnikow.objects.all().order_by('id_typu_nosnika').values()
+        form = UpdateCardTypeForm()
+        return render(request, template_name="reportPage/updateCardType.html", context={'form': form, 'types': types})

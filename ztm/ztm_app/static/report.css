@@ -120,7 +120,7 @@ button.red-btn {
 }
 
 .card-entry {
-    width: 100%;
+    width: 500px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -128,4 +128,19 @@ button.red-btn {
     border: 1px solid #777676;
     border-radius: 5px;
     padding: 0.5rem;
+}
+
+.update-form {    
+    display: flex;
+    flex-wrap: wrap;
+    width: 900px;
+    justify-content: center;
+}
+
+.update-form .form-part {
+    width: 200px;
+}
+
+.cards {
+    width: 500px;
 }

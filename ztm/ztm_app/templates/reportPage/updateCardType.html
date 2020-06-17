@@ -1,0 +1,30 @@
+{% extends "reportPage/index.html" %}
+
+
+{% block content %}
+
+<div class="cards-list">    
+    <h1>Dostępne typy nośników</h1>
+    {% for type in types %}
+        <div class="card-entry">
+            <span><strong>Nazwa:</strong> {{ type.nazwa }}</span>        
+            <span><strong>ID:</strong> {{ type.id_typu_nosnika }}</span>    
+        </div>
+    {% endfor %}
+</div>
+
+<h1>Edytuj typ ulgi</h1>
+<form action="{% url 'ztm_app:updateCardType' %}" method="POST" class="update-form cards">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-part">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+    {% endfor %}
+    
+    <div class="form-part">
+        <button type="submit" class="blue-btn">EDYTUJ TYP NOŚNIKA</button>
+    </div> 
+</form>
+{% endblock %}

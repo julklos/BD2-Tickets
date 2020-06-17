@@ -13,3 +13,13 @@ class DeleteCardTypeForm(forms.Form):
 
 class DeleteConcessionForm(forms.Form):
     id = forms.IntegerField(label='ID typu ulgi:')
+
+class UpdateCardTypeForm(forms.Form):
+    id = forms.IntegerField(label='ID:')
+    name = forms.CharField(label='Nazwa:', max_length=40)
+
+class UpdateConcessionForm(forms.Form):    
+    id = forms.IntegerField(label='ID:')
+    code = forms.IntegerField(label='Kod ulgi:', required=False)
+    discount = forms.IntegerField(label='Wysokość ulgi:', max_value=100, min_value=0, required=False)
+    name = forms.CharField(label='Nazwa:', max_length=30, required=False)
