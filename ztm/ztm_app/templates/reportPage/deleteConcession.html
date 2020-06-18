@@ -1,0 +1,31 @@
+{% extends "reportPage/index.html" %}
+
+
+{% block content %}
+
+<div class="cards-list">    
+    <h1>Dostępne typy ulg</h1>
+    {% for type in types %}
+        <div class="card-entry">
+            <span><strong>Nazwa:</strong> {{ type.nazwa }}</span>
+            <span><strong>ID:</strong> {{ type.id_typu_ulgi }}</span>
+        </div>
+    {% endfor %}
+</div>
+<hr>
+<form action="{% url 'ztm_app:deleteConcession' %}" method="POST" class="delete-form">
+    {% csrf_token %}
+    <h1>Usuń typ ulgi</h1>
+    {% for field in form %}
+        <div class="form-part">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+    {% endfor %}
+    
+    <div class="form-part">
+        <button type="submit" class="blue-btn">USUŃ TYP ULGI</button>
+    </div> 
+</form>
+
+{% endblock %}

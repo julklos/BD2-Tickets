@@ -15,31 +15,25 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{% static "cart.js" %}"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --->
-    <link rel="stylesheet" href="{% static "main.css" %}"> 
+    <link rel="stylesheet" href="{% static 'main.css' %}"> 
+    <link rel="stylesheet" href="{% static 'report.css' %}"> 
     <script src="{% static 'main.js' %}"></script>
 </head>
 <body>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-4 my-nav">
-                <div class="navbar-header">
-                  <a class="navbar-brand" >
-                    <img src="{% get_static_prefix %}logo3.png" class="img-responsive" style="width:60%; margin-top: 5%"
-                    alt="Image">
-                  </a>
-                </div>
-            </div>
-            <div class="col align-self-center rest-body">
-                {% block content %}
+    <div class="logo">
+        <a class="navbar-brand" href="{% url 'ztm_app:reportPage' %}">
+          <img src="{% get_static_prefix %}logo3.png" class="img-responsive" style="width:60%; margin-top: 5%"
+          alt="Image">
+        </a>
+    </div>
 
-                {% endblock %}
-                </div>
-            </div>
-            
-            
-        </div>
-        
+    
+    <div class="content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
 
 <footer>
     <h4 class="text-center">©ZTM 2020</h4>

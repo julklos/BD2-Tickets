@@ -1,0 +1,10 @@
+{% extends "reportPage/index.html" %}
+
+{% block content %}
+    <div class="success-message">
+        <h1 class="success">Pomyślnie usunięto {{ name }}</h1>
+        <a href="{% url 'ztm_app:editPage' %}">
+            <button class="blue-btn">OK</button>
+        </a>
+    </div>
+{% endblock %}

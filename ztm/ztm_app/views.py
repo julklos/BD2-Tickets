@@ -5,12 +5,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,NosnikiElektroniczne, Imienne,Ulgi,Pasazerowie
+from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi, TypyNosnikow, Pasazerowie
 
 import datetime
 import json
 import random
 
+from ztm_app.forms import ConcessionForm, CardTypeForm, DeleteCardTypeForm, DeleteConcessionForm, UpdateConcessionForm, UpdateCardTypeForm
 
 def index(request):
     places = MiejscaTransakcji.objects.all()
@@ -38,6 +39,7 @@ def zonesCarton(request):
         'zones': list(zones),
     }
     return render(request, template_name = "landingPage/selectZone.html", context= context)
+
 def timeCarton(request, zone):
     time = TypyBiletow.objects.filter(czas_waznosci__lt=datetime.timedelta(days=4), strefa = zone)
     context = {
@@ -46,6 +48,7 @@ def timeCarton(request, zone):
         'next': "{% url 'ztm_app:reductionCarton' %}"
     }
     return render(request, template_name = "landingPage/selectTime.html", context= context)
+
 def selectTicketCarton(request):
     time = TypyBiletow.objects.filter(czas_waznosci__lt=datetime.timedelta(days=4))
     context = {
@@ -237,5 +240,92 @@ def continueCarton(request):
 
 def thankYou(request):
     return render(request, template_name="landingPage/thankYou.html")
+
 def end(request):
     return render(request, template_name="landingPage/end.html")
+  
+def reportPage(request):
+    return render(request, template_name="reportPage/reportPage.html")
+
+def editPage(request):
+    return render(request, template_name="reportPage/editPage.html")
+
+def statsPage(request):
+    return render(request, template_name="reportPage/statsPage.html")
+
+def addConcession(request):
+    if request.method == 'POST':
+        form = ConcessionForm(request.POST)
+        if form.is_valid():
+            TypyUlgi.objects.create(kod_podstawowy=form.cleaned_data['code'], wielkosc_ulgi=form.cleaned_data['discount'], nazwa=form.cleaned_data['name'])
+            return render(request, template_name="reportPage/addingSuccess.html", context={'name': 'Typ Ulgi'})
+    else:
+        form = ConcessionForm()
+        return render(request, template_name="reportPage/addConcession.html", context={'form': form})
+
+def addCardType(request):
+    if request.method == 'POST':
+        form = CardTypeForm(request.POST)
+        if form.is_valid():
+            TypyNosnikow.objects.create(nazwa=form.cleaned_data['name'])
+            return render(request, template_name="reportPage/addingSuccess.html", context={'name': 'Typ Nośnika'})
+    else:
+        form = CardTypeForm()
+        return render(request, template_name="reportPage/addCardType.html", context={'form': form})
+
+def deleteConcession(request):
+    if request.method == 'POST':        
+        form = DeleteConcessionForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            TypyUlgi.objects.filter(id_typu_ulgi=id).delete()
+            return render(request, template_name="reportPage/deletingSuccess.html", context={'name': 'Typ Ulgi'})
+    else:
+        types = TypyUlgi.objects.all().values()
+        form = DeleteConcessionForm()
+    return render(request, template_name="reportPage/deleteConcession.html", context={'form': form, 'types': types})
+
+def deleteCardType(request):
+    if request.method == 'POST':        
+        form = DeleteCardTypeForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            TypyNosnikow.objects.filter(id_typu_nosnika=id).delete()
+            return render(request, template_name="reportPage/deletingSuccess.html", context={'name': 'Typ Nośnika'})
+    else:
+        types = TypyNosnikow.objects.all().values()
+        form = DeleteCardTypeForm()
+    return render(request, template_name="reportPage/deleteCardType.html", context={'form': form, 'types': types})
+
+def updateConcession(request):
+    if request.method == 'POST':
+        form = UpdateConcessionForm(request.POST)
+        if form.is_valid():
+            concession = TypyUlgi.objects.get(id_typu_ulgi=form.cleaned_data['id'])
+            if form.cleaned_data['code'] is not None:
+                concession.kod_podstawowy = form.cleaned_data['code']
+            if form.cleaned_data['discount'] is not None:
+                concession.wielkosc_ulgi = form.cleaned_data['discount']
+            if form.cleaned_data['name']:
+                concession.nazwa = form.cleaned_data['name']
+            concession.save()
+        return render(request, template_name="reportPage/updateSuccess.html", context={'name': 'Typ Ulgi'})
+    else:
+        types = TypyUlgi.objects.all().order_by('id_typu_ulgi').values()
+        form = UpdateConcessionForm()
+        return render(request, template_name="reportPage/updateConcession.html", context={'form': form, 'types': types})
+
+def updateCardType(request):
+    if request.method == 'POST':
+        form = UpdateCardTypeForm(request.POST)
+        if form.is_valid():
+            card_type = TypyNosnikow.objects.get(id_typu_nosnika=form.cleaned_data['id'])
+            if form.cleaned_data['name']:
+                card_type.nazwa = form.cleaned_data['name']
+            card_type.save()
+        return render(request, template_name="reportPage/updateSuccess.html", context={'name': 'Typ Nośnika'})
+    else:
+        types = TypyNosnikow.objects.all().order_by('id_typu_nosnika').values()
+        form = UpdateCardTypeForm()
+        return render(request, template_name="reportPage/updateCardType.html", context={'form': form, 'types': types})
+

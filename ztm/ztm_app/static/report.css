@@ -1,0 +1,146 @@
+h1, hr {
+    margin: 1rem 0;
+}
+
+
+
+.content {
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 15px;
+}
+
+.options {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.options.vertical {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.option {
+    width: 800px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+button.blue-btn, 
+button.green-btn,
+button.red-btn {
+    padding: .5rem 1rem;
+    font-size: 1.25rem;
+    height: 50px;
+    width: 240px;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.blue-btn {
+    background-color: #007bff;
+}
+
+.green-btn {
+    background-color: #17a2b8;
+}
+
+.red-btn {
+    background-color: #d45858;
+}
+
+.blue-btn:hover {
+    background-color: #204e80;
+}
+
+.green-btn:hover {
+    background-color: #1a5c66;
+}
+
+.red-btn:hover {
+    background-color: #813636;
+}
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-part {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.form-part input {
+    width: 100%;
+}
+
+.form-part button {
+    margin-top: 1rem;
+    align-self: center;
+}
+
+.success-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.success {
+    color: #409440;
+    margin-bottom: 2rem;
+}
+
+.delete-form {    
+    display: flex;
+    flex-direction: column;
+}
+
+.cards-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-entry {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #fdfdfd;
+    border: 1px solid #777676;
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.update-form {    
+    display: flex;
+    flex-wrap: wrap;
+    width: 900px;
+    justify-content: center;
+}
+
+.update-form .form-part {
+    width: 200px;
+}
+
+.cards {
+    width: 500px;
+}
