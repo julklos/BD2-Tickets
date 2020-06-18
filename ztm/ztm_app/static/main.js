@@ -162,11 +162,12 @@ function pay(id){
         items: items,
     }
     console.log(id,data)
-    sendActivationRequest(data, function(response) { // success
+    sendTransactionRequest(data, function(response) { // success
         alert("Zamówienie złożone pomyślnie!");
        console.log(response)
        $("#tickettable").html();
        $("#ticketsum").html();
+       $("#endSummary").html(response);
       }, sendOrderError);
 }
 

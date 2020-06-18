@@ -163,15 +163,14 @@ def transactionCarton(request):
         #     'transaction': transaction,
         # }
         print(place, payment, body)
-
-        pass
     elif request.method == 'PUT':
         pass
     elif request.method == 'GET':
         pass
     elif request.method == 'DELETE':
         pass
-    return render(request, template_name='landingPage/index.html')
+    return render(request, template_name='landingPage/thankYou.html')
+    
 
 def transactionCard(request):
     if request.method == 'POST':

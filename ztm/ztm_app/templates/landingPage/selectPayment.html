@@ -1,6 +1,7 @@
 {% extends "landingPage/index.html" %}
 {% block content %}
-<h1   class="text-left">Podsumowanie </h1>
+<span id="endSummary" >
+<h1  class="text-left">Podsumowanie </h1>
 <div  >
     <div style="max-height: 50vh; overflow: auto; border: 1px solid black;
     border-radius: 5px;padding:1%; max-width: 50vw;" id="tickettable"> 
@@ -13,7 +14,7 @@
         
         <div  style="margin-top: 0.5%" class="btn-group-lg buttons-select" role="group">
             {% for pay in payment %} 
-            <a  href="{% url 'ztm_app:thankyou' %}">
+            <a  >
                 <button onclick="pay({{pay.id_metody_platnosci}})" type="button" class="btn-lg btn-info">{{pay.nazwa}}
                 </button>
             </a>
@@ -22,6 +23,7 @@
         </div>
         
 </div>
+</span>
 <script type="text/javascript">
 
    summary()
