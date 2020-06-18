@@ -88,6 +88,17 @@ function setCard(id_c){
   storeTickets(tickets)
 }
 
+function setTicket(id_c){
+  const data = {
+    ticket : id_c,
+  }
+  console.log(id_c,data)
+  sendTransactionRequest(data, function(response) { // success
+    alert("Aktywacja przebiegła pomyślnie!");
+   console.log(response)
+  }, sendOrderError);
+}
+
 function pay(id){
     const data = {
         payment : id,
@@ -95,7 +106,7 @@ function pay(id){
         items: JSON.parse(window.localStorage.getItem('tickets')).items,
     }
     console.log(id,data)
-    sendTransactionRequest(data, function(response) { // success
+    sendActivationRequest(data, function(response) { // success
         alert("Zamówienie złożone pomyślnie!");
        console.log(response)
       }, sendOrderError);
@@ -112,6 +123,18 @@ function payCard(id){
       alert("Zamówienie złożone pomyślnie!");
      console.log(response)
     }, sendOrderError);
+}
+
+function sendActivationRequest(info, onSuccess, onError)
+{
+  $.ajax(
+    { url: '/transactionActivation'
+    , success: onSuccess
+    , data: JSON.stringify(info)
+    , contentType: 'application/json'
+    , error: onError
+    , type: 'POST'
+    });
 }
 
 function sendTransactionRequest(info, onSuccess, onError)

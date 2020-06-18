@@ -23,6 +23,10 @@ urlpatterns = [
     path('zonesCard', views.selectZoneTicket, name="zonesCard"),
     path('thankyou', views.thankYou, name="thankyou"),
     path('confirmCard', views.confirmCard, name="confirmCard"),
+    path('selectTicket', views.selectTicket, name="selectTicket"),
+    path('findTicket', views.findTicket, name = "findTicket"),
+    path('transactionActivation', views.transactionActivation, name= "transactionActivation"),
+    path('end', views.end, name= "end"),
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),

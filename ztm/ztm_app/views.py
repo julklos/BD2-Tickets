@@ -25,6 +25,12 @@ def selectCard(request):
     }
     return render(request, template_name = "landingPage/cardTicket.html",context=context)
 
+def selectTicket(request):
+    context = {
+        'name':  "Aktywuj bilet",
+    }
+    return render(request, template_name = "landingPage/activationTicket.html",context=context)
+
 def zonesCarton(request):
     zones = TypyBiletow.objects.order_by().values('strefa').distinct()
     context = {
@@ -73,6 +79,25 @@ def confirmCard(request):
     }
 
     return render(request, template_name = "landingPage/selectPaymentCard.html", context = context)
+
+def findTicket(request):
+    id_b = request.POST.get('id_b')
+    print(id_b)
+    user_ticket = Imienne.objects.filter(id_biletu = id_b)
+    if user_ticket == None:
+        user_ticket = Nieimienne.objects.filter(id_biletu = id_b)
+        if user_ticket == None:
+            return render(request, "landingPage/invalidTicketId.html")
+    if user_ticket[0].data_aktywacji is not None:
+        return render(request, "landingPage/ticketActivated.html")
+    user_type = TypyBiletow.objects.get(id_typu_biletu = user_ticket[0].id_typu)
+    
+    contex = {
+        'name' : "Aktywuj bilet",
+        'ticket' : user_ticket[0],
+        'type' : user_type,
+    }
+    return render(request, template_name = "landingPage/activate.html", context = contex)
 
 def selectZoneTicket(request):
     id_t = request.POST.get('id_t')
@@ -176,6 +201,28 @@ def transactionCard(request):
         pass
     return render(request, template_name='landingPage/index.html')
 
+def transactionActivation(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        user_ticket = Imienne.objects.filter(id_biletu = body['ticket'])
+        if user_ticket == None:
+            user_ticket = Nieimienne.objects.filter(id_biletu = body['ticket'])
+        user_ticket[0].data_aktywacji = datetime.date.today()
+        print(user_ticket[0].data_aktywacji)
+        user_ticket[0].save()
+
+        print(body)
+        
+        pass
+    elif request.method == 'PUT':
+        pass
+    elif request.method == 'GET':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    return render(request, template_name='landingPage/index.html')
+
 def addTicket(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
@@ -190,3 +237,5 @@ def continueCarton(request):
 
 def thankYou(request):
     return render(request, template_name="landingPage/thankYou.html")
+def end(request):
+    return render(request, template_name="landingPage/end.html")
