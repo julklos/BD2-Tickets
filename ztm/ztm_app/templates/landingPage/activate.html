@@ -1,0 +1,14 @@
+{% extends "landingPage/index.html" %}
+{% block content %}
+<h1 class="text-left">{{name}}</h1>
+<div style="max-height: 85%; overflow: auto;">
+        <span><p>Czas waznosci biletu: {{type.czas_waznosci}}</p></span>
+        <span><p>Strefa: {{type.strefa}}</p></span>
+        <a  href="{% url 'ztm_app:end' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <button style="margin-left:5%" onclick="setTicket({{ticket.id_biletu}})" type="button" class="btn btn-primary">Aktywuj</button>        
+        </a>
+        
+        
+</div>
+
+{% endblock %}

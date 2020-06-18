@@ -2,12 +2,12 @@
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
 <div>
-    <form action="{% url 'ztm_app:zonesCard' %}" method="post" class="form-creation">
+    <form action="{% url 'ztm_app:findTicket' %}" method="post" class="form-creation">
         {% csrf_token %}
         <div class = "form-group row">
-            <label for="id_t" class="col-xs-3 col-form-label">Id: </label>
+            <label for="id_b" class="col-xs-3 col-form-label">Id biletu: </label>
             <div class="col-xs-9">
-                <input id="id_t" name="id_t" class="form-control" placeholder="np.6790876" required="" autofocus="" type="text">
+                <input id="id_b" name="id_b" class="form-control" placeholder="np.6790876" required="" autofocus="" type="text">
             </div>
         </div>
     <button class="btn-lg btn-primary" type="submit">Znajdz</button>

@@ -1,22 +1,25 @@
 {% extends "landingPage/index.html" %}
 {% block content %}
 <h1 class="text-left">{{name}}</h1>
-<div>
+<div style="max-height: 85%; overflow: auto;">
     <span><p>Ulga_waznosc: {{ulga.data_waznosci}}</p></span>
-    <span><p>Ulga_typ: {{ulga.id_typu_ulgi.wielkosc_ulgi}} %</p></span>
+    <span><p>Ulga_typ: {{ulga.id_typu_ulgi.wielkosc_ulgi}} %</p></span> 
     <span><p>Data waznosci bilet: {{ticket.data_waznosci}}</p></span>
     <span><p>Data aktywacji bilet: {{ticket.data_aktywacji}}</p></span>
-    <span><p>Pasazer: {{ticket.id_pasazera.id_pasazera.imie}} {{ticket.id_pasazera.id_pasazera.nazwisko}}</p></span>
-</div>
-<div>
+    <span><p>Pasazer: {{cardId.id_pasazera.imie}} {{cardId.id_pasazera.nazwisko}}</p></span>
+
     <h3 style="margin-top: 5%" class="text-left">Strefa</h1>
-        
-        <div  style="margin-top: 0.5%" class="btn-group-lg buttons-select" role="group">
-            {% for zone in zones %} 
-                <button type="button" class="btn-lg btn-primary">{{zone.strefa}}
-                </button>
+            {% for t in time %} 
+            <div  onclick= "setTicketType({{t.id_typu_biletu}}); setReduction({{ulga.id_ulgi}}); setClient({{cardId.id_pasazera.id_pasazera}});
+              setCard({{cardId.id_nosnika}}) " style="width: 50%" class="list-group">
+                <a  href="{% url 'ztm_app:confirmCard' %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div  class="d-flex w-50 justify-content-between">
+                    <h5 class="mb-1">Czas ważności:  {{t.czas_waznosci}}</h5>
+                  </div>
+                  <p class="mb-1">Cena: {{t.cena}}</p>
+                  <p> strefa: <span class="badge badge-primary badge-pill">{{t.strefa}}</span></p>
+                </a>
+              </div>
             {% endfor %}
-        </div>
-        
 </div>
 {% endblock %}
