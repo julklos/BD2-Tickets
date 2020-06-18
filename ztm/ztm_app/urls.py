@@ -17,6 +17,7 @@ urlpatterns = [
     path('reductionCarton', views.reductionCarton, name='reductionCarton'),
     path('confirmCarton', views.confirmCarton, name="confirmCarton"),
     path('transactionCarton', views.transactionCarton, name= 'transactionCarton'),
+    path('transactionCard', views.transactionCard, name= 'transactionCard'),
     path('amount', views.amount, name="amount"),
     path('continueCarton', views.continueCarton, name="continueCarton"),
     path('zonesCard', views.selectZoneTicket, name="zonesCard"),

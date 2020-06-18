@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi
+from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,NosnikiElektroniczne, Imienne,Ulgi,Pasazerowie
 
 import datetime
 import json
@@ -92,8 +92,17 @@ def selectZoneTicket(request):
         'ulga' : user_ulga,
         }
         return render(request, "landingPage/ticketExist.html", context = contex)
+    
+    if user_ulga.data_waznosci < datetime.date.today():
+        contex = {
+        'name':  "Doladowanie karty",
+        'cardId' : user_card,
+        'ticket' : user_ticket[0],
+        'ulga' : user_ulga,
+        }
+        return render(request, "landingPage/reductionInvalid.html", context = contex)
 
-    time = TypyBiletow.objects.filter(czas_waznosci__gte=datetime.timedelta(days=4))
+    time = TypyBiletow.objects.filter(czas_waznosci__gte=datetime.timedelta(days=4)).order_by('-czas_waznosci')
     contex = {
         'name':  "Doladowanie karty",
         'cardId' : user_card,
@@ -135,6 +144,38 @@ def transactionCarton(request):
     elif request.method == 'DELETE':
         pass
     return render(request, template_name='landingPage/index.html')
+
+def transactionCard(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        print(int(body['place']))
+        place = MiejscaTransakcji.objects.get(id_miejsca_transakcji = int(body['place']))
+        payment = MetodyPlatnosci.objects.get(id_metody_platnosci = body['payment'])
+        transaction = Transakcje.objects.create(id_miejsca_transakcji=place, id_metody_platnosci = payment)
+        for item in body['items']:
+            reduction = Ulgi.objects.get(id_ulgi = item['reduction'])
+            typeTicket = TypyBiletow.objects.get(id_typu_biletu= item['type'])
+            client = Pasazerowie.objects.get(id_pasazera = item['client'])
+            card = NosnikiElektroniczne.objects.get(id_nosnika = item['card'])
+            ticket = Imienne.objects.create(id_transakcji= transaction.id_transakcji, id_nosnika=card.id_nosnika, id_pasazera = card,
+                id_typu=typeTicket.id_typu_biletu,id_ulgi= reduction.id_ulgi)
+
+        #print('transakcja', transaction)
+        # context = {
+        #     'transaction': transaction,
+        # }
+        print(place, payment, body)
+
+        pass
+    elif request.method == 'PUT':
+        pass
+    elif request.method == 'GET':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    return render(request, template_name='landingPage/index.html')
+
 def addTicket(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')

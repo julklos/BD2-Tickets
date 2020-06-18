@@ -72,6 +72,22 @@ function setReduction(r){
     storeTickets(tickets)
 }
 
+function setClient(id_p){
+  tickets = loadTickets();
+  var last = tickets.items.pop()
+  last.client = id_p;
+  tickets.items.push(last);
+  storeTickets(tickets)
+}
+
+function setCard(id_c){
+  tickets = loadTickets();
+  var last = tickets.items.pop()
+  last.card = id_c;
+  tickets.items.push(last);
+  storeTickets(tickets)
+}
+
 function pay(id){
     const data = {
         payment : id,
@@ -85,6 +101,19 @@ function pay(id){
       }, sendOrderError);
 }
 
+function payCard(id){
+  const data = {
+      payment : id,
+      place : JSON.parse(window.localStorage.getItem('place')).id,
+      items: JSON.parse(window.localStorage.getItem('tickets')).items,
+  }
+  console.log(id,data)
+  sendTransactionRequestCard(data, function(response) { // success
+      alert("Zamówienie złożone pomyślnie!");
+     console.log(response)
+    }, sendOrderError);
+}
+
 function sendTransactionRequest(info, onSuccess, onError)
 {
   $.ajax(
@@ -96,6 +125,19 @@ function sendTransactionRequest(info, onSuccess, onError)
     , type: 'POST'
     });
 }
+
+function sendTransactionRequestCard(info, onSuccess, onError)
+{
+  $.ajax(
+    { url: '/transactionCard'
+    , success: onSuccess
+    , data: JSON.stringify(info)
+    , contentType: 'application/json'
+    , error: onError
+    , type: 'POST'
+    });
+}
+
 function sendOrderError(xhr, textstatus) {
     alert("BŁĄD");
   }
