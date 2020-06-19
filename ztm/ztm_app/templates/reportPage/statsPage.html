@@ -1,5 +1,25 @@
 {% extends "reportPage/index.html" %}
 
+
 {% block content %}
-    stats
+
+<div class="form-group">
+    <label style="color: #117a8b" for="selectStat">Wybierz statystykę: </label>
+    <select style="border-color: #117a8b" class="form-place form-control-sm" id="selectStat">
+        {% for stat in statistics %}
+            <option onclick="showStatAlert()" value={{stat}}>{{stat}}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="form-part" style="margin-top: 20px;">
+    <h2 id="wybrana_statystyka">Wybrana statystyka: brak</h2>
+</div> 
+    
+<div style="margin-top: 50px;">
+    <a id="statButton" href= "#">
+        <button onclick="showStat()" type="submit" class="blue-btn">WYŚWIETL STATYSTYKI</button>
+    </a>
+</div>
+
 {% endblock %}

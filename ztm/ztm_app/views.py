@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.template import loader
+from django.db.models import Sum
 import django
 
 from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi, TypyNosnikow, Pasazerowie
@@ -329,4 +330,138 @@ def updateCardType(request):
         types = TypyNosnikow.objects.all().order_by('id_typu_nosnika').values()
         form = UpdateCardTypeForm()
         return render(request, template_name="reportPage/updateCardType.html", context={'form': form, 'types': types})
+        
+def statsPage(request):
+    statistics = ['brak', 'Bilety', 'MiejscaTransakcji', 'Transakcje'];
+    return render(request, template_name = "reportPage/statsPage.html", context = 
+    {'statistics': statistics})
+
+def ticketStats(request):
+    numberOfElectronicTickets = Imienne.objects.filter().count()
+    numberOfPaperTickets = Nieimienne.objects.filter().count()
+    tickets = TypyBiletow.objects.all()
+    tmp_k=0;
+    liczba_biletow_k=0;    
+    for ticket in tickets:
+        tmp_k = Nieimienne.objects.filter(id_typu = ticket.id_typu_biletu).count()
+        if tmp_k > liczba_biletow_k:
+            liczba_biletow_k = tmp_k
+            mostPopularPaperTicketId = ticket.id_typu_biletu
+
+    e_procent = (numberOfElectronicTickets/(numberOfElectronicTickets+numberOfPaperTickets))*100
+    e_procent = round(e_procent, 2)
+
+    p_procent = (numberOfPaperTickets/(numberOfElectronicTickets+numberOfPaperTickets))*100
+    p_procent = round(p_procent, 2)
+
+    mostPopularPaperTicketProcent = (liczba_biletow_k/numberOfPaperTickets)*100
+    mostPopularPaperTicketProcent = round(mostPopularPaperTicketProcent, 2)
+    mostPopularPaperTicket = TypyBiletow.objects.filter(id_typu_biletu = mostPopularPaperTicketId)[0].czas_waznosci
+
+    tmp_e=0;
+    liczba_biletow_e=0;    
+    for ticket in tickets:
+        tmp_e = Imienne.objects.filter(id_typu = ticket.id_typu_biletu).count()
+        if tmp_e > liczba_biletow_e:
+            liczba_biletow_e = tmp_e
+            mostPopularElectronicTicketId = ticket.id_typu_biletu
+
+    mostPopularElectronicTicketProcent = (liczba_biletow_e/numberOfElectronicTickets)*100
+    mostPopularElectronicTicketProcent = round(mostPopularElectronicTicketProcent, 2)
+    mostPopularElectronicTicket = TypyBiletow.objects.filter(id_typu_biletu = mostPopularElectronicTicketId)[0].czas_waznosci
+
+    conncessions = TypyUlgi.objects.all()
+    tmp_u_n=0
+    tmp_u_i=0
+    tmp_u=0
+    liczba_biletow_u=0;
+    for concession in conncessions:
+        if concession.id_typu_ulgi==7:
+            break;
+        tmp_u_n = Nieimienne.objects.filter(id_typu_ulgi = concession.id_typu_ulgi).count()
+        tmp_u_i = Ulgi.objects.filter(id_typu_ulgi = concession.id_typu_ulgi).count()
+        tmp_u = tmp_u_i+tmp_u_n
+        if tmp_u > liczba_biletow_u:
+            liczba_biletow_u = tmp_u
+            mostPopularConcessionId = concession.id_typu_ulgi
+
+    mostPopularConcession = TypyUlgi.objects.filter(id_typu_ulgi = mostPopularConcessionId)[0].nazwa
+    u_procent = (liczba_biletow_u/(numberOfElectronicTickets+numberOfPaperTickets))*100
+    u_procent = round(u_procent, 2)
+
+    return render(request, template_name = "reportPage/ticketStats.html", context = 
+    {'numberOfElectronicTickets': numberOfElectronicTickets, 'numberOfPaperTickets': numberOfPaperTickets,
+    'mostPopularPaperTicket': mostPopularPaperTicket, 'liczba_biletow_k': liczba_biletow_k, 'mostPopularPaperTicketProcent': mostPopularPaperTicketProcent,
+    'mostPopularConcession': mostPopularConcession, 'liczba_biletow_u': liczba_biletow_u, 
+    'p_procent': p_procent, 'e_procent': e_procent, 'u_procent': u_procent,
+    'mostPopularElectronicTicket': mostPopularElectronicTicket, 'liczba_biletow_e': liczba_biletow_e,
+    'mostPopularElectronicTicketProcent': mostPopularElectronicTicketProcent})
+
+def transactionPlaceStats(request):
+    
+    total_income_dictionary = Transakcje.objects.aggregate(Sum('kwota'))
+    total_income = total_income_dictionary['kwota__sum']
+
+    places = MiejscaTransakcji.objects.all()
+    tmp=0;
+    tmp_k=0
+    max_income=0
+    number_of_transactions=0; 
+    most_popular_place_income=0   
+    for place in places:
+        transactions = Transakcje.objects.filter(id_miejsca_transakcji = place.id_miejsca_transakcji)
+        tmp = transactions.count()
+        tmp_k=0
+        for transaction in transactions:
+            tmp_k += transaction.kwota
+        if tmp_k > max_income:
+            max_income = tmp_k
+            maxIncomePlaceId = place.id_miejsca_transakcji
+        if tmp > number_of_transactions:
+            number_of_transactions = tmp
+            most_popular_place_income=tmp_k   
+            mostPopularTransactionPlaceId = place.id_miejsca_transakcji
+    
+    max_income_procent = (max_income/(total_income))*100
+    max_income_procent = round(max_income_procent, 2)
+
+    most_popular_place_income_procent = (most_popular_place_income/(total_income))*100
+    most_popular_place_income_procent = round(most_popular_place_income_procent, 2)
+
+    mostPopularTransactionPlace = MiejscaTransakcji.objects.filter(id_miejsca_transakcji = mostPopularTransactionPlaceId)[0].nazwa
+    maxIncomePlace = MiejscaTransakcji.objects.filter(id_miejsca_transakcji = maxIncomePlaceId)[0].nazwa
+    most_popular_place_income = round(most_popular_place_income, 2)
+
+    return render(request, template_name = "reportPage/transactionPlaceStats.html", context = 
+    {'number_of_transactions': number_of_transactions, 'max_income': max_income, 'most_popular_place_income': most_popular_place_income,
+    'mostPopularTransactionPlace': mostPopularTransactionPlace, 'maxIncomePlace': maxIncomePlace,
+    'total_income': total_income, 'max_income_procent': max_income_procent, 
+    'most_popular_place_income_procent': most_popular_place_income_procent})
+
+def transactionStats(request):
+
+    total_income_dictionary = Transakcje.objects.aggregate(Sum('kwota'))
+    total_income = total_income_dictionary['kwota__sum']
+
+    number_of_transactions = Transakcje.objects.all().count()
+
+    average_income_of_transaction = total_income/number_of_transactions
+    average_income_of_transaction = round(average_income_of_transaction, 2)
+
+    transactions = Transakcje.objects.all()
+    payments = MetodyPlatnosci.objects.all()
+    tmp_t=0
+    liczba_transakcji_m=0
+    for payment in payments:
+        tmp_t = Transakcje.objects.filter(id_metody_platnosci = payment.id_metody_platnosci).count()
+        if tmp_t > liczba_transakcji_m:
+            liczba_transakcji_m = tmp_t
+            mostPopularPaymentMethodId = payment.id_metody_platnosci
+
+    mostPopularPaymentMethod = MetodyPlatnosci.objects.filter(id_metody_platnosci = mostPopularPaymentMethodId)[0].nazwa
+    
+    return render(request, template_name = "reportPage/transactionStats.html", context = 
+    {'total_income': total_income, 'number_of_transactions': number_of_transactions,
+    'average_income_of_transaction': average_income_of_transaction,
+    'mostPopularPaymentMethod': mostPopularPaymentMethod})
 

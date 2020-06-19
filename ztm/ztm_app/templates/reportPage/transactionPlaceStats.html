@@ -1,0 +1,23 @@
+{% extends "reportPage/index.html" %}
+
+
+{% block content %}
+
+<h2>Statystyki sprzedaży biletów w miejscach transakcji:</h2>
+
+<div class="form-part">
+    <h3 style="margin-top: 20px;">Całkowity przychód: {{total_income}}</h3>
+    <h3 style="margin-top: 20px;">Miejsce z największą liczbą transakcji: {{mostPopularTransactionPlace}}</h3>
+    <h3>Liczba transakcji w "{{mostPopularTransactionPlace}}": {{number_of_transactions}}</h3>
+    <h3>Przychód w "{{mostPopularTransactionPlace}}": {{most_popular_place_income}} [{{most_popular_place_income_procent}}% całkowitego przychodu]</h3>
+    <h3 style="margin-top: 20px;">Miejsce z najwyższym przychodem: {{maxIncomePlace}}</h3>
+    <h3>Przychód w "{{maxIncomePlace}}": {{max_income}} [{{max_income_procent}}% całkowitego przychodu]</h3>
+</div> 
+    
+<div class="form-part">
+    <a href=" {% url 'ztm_app:statsPage' %}">
+        <button type="submit" class="blue-btn">POWRÓT</button>
+    </a>
+</div> 
+
+{% endblock %}

@@ -36,6 +36,9 @@ urlpatterns = [
     path('deleteCardType', views.deleteCardType, name="deleteCardType"),
     path('updateCardType', views.updateCardType, name="updateCardType"),
     path('updateConcession', views.updateConcession, name="updateConcession"),
+    path('ticketStats', views.ticketStats, name="ticketStats"),
+    path('transactionPlaceStats', views.transactionPlaceStats, name="transactionPlaceStats"),
+    path('transactionStats', views.transactionStats, name="transactionStats"),
     #path('<int:question_id>/', views.detail, name='detail'),
     # ex: /polls/5/results/
     # path('<int:question_id>/results/', views.results, name='results'),
