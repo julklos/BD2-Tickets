@@ -33,7 +33,7 @@ h1, hr {
 }
 
 .option {
-    width: 800px;
+    width: 600px;
     display: flex;
     justify-content: space-between;
     padding: 1rem;
