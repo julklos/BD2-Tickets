@@ -226,3 +226,24 @@ function sendTransactionRequestCard(info, onSuccess, onError)
 function sendOrderError(xhr, textstatus) {
     alert("BŁĄD");
   }
+  
+function showStatAlert() {
+  var stat = document.getElementById("selectStat").value;
+  document.getElementById("wybrana_statystyka").innerText = `Wybrana statystyka: ${stat}`
+}
+
+function showStat() {
+  var stat = document.getElementById("selectStat").value;
+  if (stat == "brak") {
+    alert("Nie wybrałeś statystyki. Wybierz z listy jedną z dostępnych statystyk.");
+  }
+  if (stat == "Bilety") {
+    document.getElementById("statButton").href = 'ticketStats'
+  }
+  if (stat == "MiejscaTransakcji") {
+    document.getElementById("statButton").href = 'transactionPlaceStats'
+  }
+  if (stat == "Transakcje") {
+    document.getElementById("statButton").href = 'transactionStats'
+  }
+}

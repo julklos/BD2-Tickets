@@ -1,0 +1,45 @@
+{% extends "reportPage/index.html" %}
+
+
+{% block content %}
+
+<h2>Statystyki sprzedanych biletów:</h2>
+
+<div class="form-part">
+    <h4 style="margin-top: 20px;">Sprzedane bilety elektroniczne: {{numberOfElectronicTickets}} [{{e_procent}}% wszystkich biletów]</h4>
+    <h4>Sprzedane bilety kartonikowe: {{numberOfPaperTickets}} [{{p_procent}}% wszystkich biletów]</h4>
+    <h4 style="margin-top: 20px;">Najczęściej wybierany rodzaj biletu kartonikowego: "{{mostPopularPaperTicket}}"</h4>
+    <h4>Liczba zakupionych biletów "{{mostPopularPaperTicket}}": {{liczba_biletow_k}} [{{mostPopularPaperTicketProcent}}% wszystkich kartonikowych]</h4>
+    <h4 style="margin-top: 20px;">Najczęściej wybierany rodzaj biletu imiennego: "{{mostPopularElectronicTicket}}"</h4>
+    <h4>Liczba zakupionych biletów "{{mostPopularElectronicTicket}}": {{liczba_biletow_e}} [{{mostPopularElectronicTicketProcent}}% wszystkich imiennych]</h4>
+    <h4 style="margin-top: 20px;">Najczęściej używany rodzaj ulgi: "{{mostPopularConcession}}"</h4>
+    <h4>Liczba biletów zakupionych z ulgą "{{mostPopularConcession}}": {{liczba_biletow_u}} [{{u_procent}}% wszystkich biletów]</h4>
+
+
+</div> 
+    
+<div class="form-part">
+    <a href=" {% url 'ztm_app:statsPage' %}">
+        <button type="submit" class="blue-btn">POWRÓT</button>
+    </a>
+</div> 
+
+<!-- <div id="lecture-reviews">
+    <div class="row">
+      <div class="col-lg-4">
+        <div id="piechart-speech-congrous"></div>
+        <div class="placeholder-piechart"></div>
+      </div>
+      <div class="col-lg-4">
+        <div id="piechart-topic-interesting"></div>
+        <div class="placeholder-piechart"></div>
+      </div>
+      <div class="col-lg-4">
+        <div id="piechart-visual-aspects"></div>
+        <div class="placeholder-piechart"></div>
+      </div>
+    </div>
+  </div> -->
+
+
+{% endblock %}
