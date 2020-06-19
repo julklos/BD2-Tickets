@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.template import loader
+import django
 
 from .models import TypyBiletow,Transakcje,NosnikiKartonikowe,Nieimienne, MiejscaTransakcji, TypyUlgi, MetodyPlatnosci,  NosnikiElektroniczne, Imienne,Ulgi, TypyNosnikow, Pasazerowie
 
@@ -112,7 +113,7 @@ def selectZoneTicket(request):
     
     user_ticket = list(Imienne.objects.filter(id_nosnika = id_t).order_by('-data_waznosci'))
     user_ulga = Ulgi.objects.get(id_ulgi = user_card.id_ulgi)
-    if user_ticket[0].data_waznosci is not None and user_ticket[0].data_waznosci > datetime.date.today(): # DO ZMIANY
+    if user_ticket[0].data_waznosci is None or user_ticket[0].data_waznosci > datetime.date.today(): # DO ZMIANY
         contex = {
         'name':  "Doladowanie karty",
         'cardId' : user_card,
@@ -207,11 +208,12 @@ def transactionActivation(request):
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        user_ticket = Imienne.objects.filter(id_biletu = body['ticket'])
+        user_ticket = list(Imienne.objects.filter(id_biletu = body['ticket']))
         if user_ticket == None:
-            user_ticket = Nieimienne.objects.filter(id_biletu = body['ticket'])
-        user_ticket[0].data_aktywacji = datetime.date.today()
+            user_ticket = list(Nieimienne.objects.filter(id_biletu = body['ticket']))
+        user_ticket[0].data_aktywacji = django.utils.timezone.now()
         print(user_ticket[0].data_aktywacji)
+        print(datetime.date.today())
         user_ticket[0].save()
 
         print(body)

@@ -142,7 +142,7 @@ function setTicket(id_c){
     ticket : id_c,
   }
   console.log(id_c,data)
-  sendTransactionRequest(data, function(response) { // success
+    sendActivationRequest(data, function(response) { // success
     alert("Aktywacja przebiegła pomyślnie!");
    console.log(response)
   }, sendOrderError);
