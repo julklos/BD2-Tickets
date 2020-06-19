@@ -88,10 +88,10 @@ def confirmCard(request):
 def findTicket(request):
     id_b = request.POST.get('id_b')
     print(id_b)
-    user_ticket = Imienne.objects.filter(id_biletu = id_b)
-    if user_ticket == None:
-        user_ticket = Nieimienne.objects.filter(id_biletu = id_b)
-        if user_ticket == None:
+    user_ticket = list(Imienne.objects.filter(id_biletu = id_b))
+    if len(user_ticket) == 0:
+        user_ticket = list(Nieimienne.objects.filter(id_biletu = id_b))
+        if len(user_ticket) == 0:
             return render(request, "landingPage/invalidTicketId.html")
     if user_ticket[0].data_aktywacji is not None:
         return render(request, "landingPage/ticketActivated.html")
@@ -210,7 +210,7 @@ def transactionActivation(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         user_ticket = list(Imienne.objects.filter(id_biletu = body['ticket']))
-        if user_ticket == None:
+        if len(user_ticket) == 0 :
             user_ticket = list(Nieimienne.objects.filter(id_biletu = body['ticket']))
         user_ticket[0].data_aktywacji = django.utils.timezone.now()
         print(user_ticket[0].data_aktywacji)
