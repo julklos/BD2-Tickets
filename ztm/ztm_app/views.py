@@ -113,7 +113,7 @@ def selectZoneTicket(request):
     
     user_ticket = list(Imienne.objects.filter(id_nosnika = id_t).order_by('-data_waznosci'))
     user_ulga = Ulgi.objects.get(id_ulgi = user_card.id_ulgi)
-    if user_ticket[0].data_waznosci is None or user_ticket[0].data_waznosci > datetime.date.today(): # DO ZMIANY
+    if user_ticket[0].data_waznosci is None or user_ticket[0].data_waznosci.date() > datetime.date.today(): # DO ZMIANY
         contex = {
         'name':  "Doladowanie karty",
         'cardId' : user_card,
